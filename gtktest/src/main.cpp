@@ -16,96 +16,47 @@
 const int areaWidth=1000;
 const int areaHeight=3*areaWidth/4;
 
+static gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data) {
+	double x, y;
+	const char string[] = "j6()J";
+	std::string s = string + std::string("\n<i>abc123</i>");
+	const int fontSize = 40;
+	const GdkRGBA BLACK_COLOR = { 0., 0., 0., 1. };
+	const GdkRGBA LINE_COLOR = { 1, 0.2, 0.2, 0.6 };
 
-const GdkRGBA BLACK_COLOR = { 0., 0., 0., 1. };
-
-void draw(GtkWidget *widget, cairo_t *cr){
-//	const GdkRGBA bg = {0xF6/255. , 0xF4/255., 0xBA/255.,1};
-//	const GdkRGBA linecolor = {0 , 0, 0,1};
-
-	int i;
-	double x,y;
-	std::string s;
-	cairo_text_extents_t extents;
-
-	const char *string = "j6()J";
-//	const char *utf8 = "66.()";
-
-	const int fontSize=40;
-
-	setFont(cr,"Times New Roman",fontSize, CAIRO_FONT_SLANT_NORMAL,
+	//set for both drawMarkup & drawText
+	setFont(cr, "Times New Roman", fontSize, CAIRO_FONT_SLANT_NORMAL,
 			CAIRO_FONT_WEIGHT_NORMAL);
 
-	s=string+std::string("\n<i>abc123</i>");
+	cairo_rectangle_int_t rect = { 30, 30, 200, 200 };
+	x = rect.x;
+	y = rect.y;
+	gdk_cairo_set_source_rgba(cr, &LINE_COLOR);
+	cairo_set_line_width(cr, 6.0);
+	cairo_arc(cr, x, y, 10.0, 0, 2 * G_PI);
+	cairo_fill(cr);
+	cairo_rectangle(cr, x, y, rect.width, rect.height);
+	cairo_stroke(cr);
 
-	const int wi=200;
-	cairo_rectangle_int_t rect={0,0,wi,200};
+	gdk_cairo_set_source_rgba(cr, &BLACK_COLOR);
+	drawMarkup(cr, s, rect, DRAW_TEXT_BEGIN, DRAW_TEXT_CENTER);
 
-	for(i=0;i<9;i++){
-		rect.x = 30 + (wi+30) * (i%3);
-		cairo_set_source_rgba (cr, 1, 0.2, 0.2, 0.6);
-		cairo_set_line_width (cr, 6.0);
-		cairo_arc (cr, rect.x, rect.y, 10.0, 0, 2*G_PI);
-		cairo_fill (cr);
+	const int len = 100;
+	x = 350;
+	y = rect.y+rect.height/2;
+	gdk_cairo_set_source_rgba(cr, &LINE_COLOR);
+	cairo_set_line_width(cr, 6.0);
+	cairo_arc(cr, x, y, 10.0, 0, 2 * G_PI);
+	cairo_fill(cr);
+	cairo_move_to(cr, x - len, y);
+	cairo_rel_line_to(cr, 2 * len, 0);
+	cairo_move_to(cr, x, y - len);
+	cairo_rel_line_to(cr, 0, 2 * len);
+	cairo_stroke(cr);
 
-		cairo_rectangle(cr,rect.x,rect.y,rect.width,rect.height);
-		cairo_stroke (cr);
+	gdk_cairo_set_source_rgba(cr, &BLACK_COLOR);
+	drawText(cr, string, x, y, DRAW_TEXT_CENTER, DRAW_TEXT_CENTER);
 
-		gdk_cairo_set_source_rgba(cr, &BLACK_COLOR);
-		drawMarkup(cr, s, rect,
-				DRAW_TEXT(i%3), DRAW_TEXT(i/3));
-		if((i+1)%3==0){
-			rect.y+=220;
-		}
-	}
-
-//	x=25;
-//	y=150;
-	x=700;
-	y=700;
-
-	cairo_text_extents (cr, string, &extents);
-	cairo_move_to (cr, x,y);
-	cairo_show_text (cr, string);
-
-	cairo_set_source_rgba (cr, 1, 0.2, 0.2, 0.6);
-	cairo_set_line_width (cr, 6.0);
-	cairo_arc (cr, x, y, 10.0, 0, 2*G_PI);
-	cairo_fill (cr);
-	cairo_move_to (cr, x,y);
-	cairo_rel_line_to (cr, 0, extents.y_bearing);
-	cairo_rel_line_to (cr, extents.width, 0);
-	cairo_rel_line_to (cr, extents.x_bearing, extents.height);
-	cairo_rel_line_to (cr, -extents.width, 0);
-	cairo_stroke (cr);
-
-
-
-	const int len=100;
-	DRAW_TEXT d[]={DRAW_TEXT_BEGIN,DRAW_TEXT_CENTER,DRAW_TEXT_END};
-	for(i=0;i<3;i++){
-		x = 850;
-		y = 80 + 250 * i;
-
-		cairo_set_source_rgba(cr, 1, 0.2, 0.2, 0.6);
-		cairo_set_line_width(cr, 6.0);
-		cairo_arc(cr, x, y, 10.0, 0, 2 * G_PI);
-		cairo_fill(cr);
-		cairo_move_to(cr, x - len, y);
-		cairo_rel_line_to(cr, 2 * len, 0);
-		cairo_move_to(cr, x, y - len);
-		cairo_rel_line_to(cr, 0, 2 * len);
-		cairo_stroke(cr);
-
-		gdk_cairo_set_source_rgba(cr, &BLACK_COLOR);
-		drawText(cr, string, x, y, d[i],DRAW_TEXT_CENTER);
-	}
-
-
-}
-
-static gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data) {
-	draw(widget,cr);
 	return FALSE;
 }
 
