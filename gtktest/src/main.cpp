@@ -38,7 +38,7 @@ void draw(GtkWidget *widget, cairo_t *cr){
 
 	s=string+std::string("\n<i>abc123</i>");
 
-	const int wi=300;
+	const int wi=200;
 	cairo_rectangle_int_t rect={0,0,wi,200};
 
 	for(i=0;i<9;i++){
@@ -78,14 +78,14 @@ void draw(GtkWidget *widget, cairo_t *cr){
 	cairo_rel_line_to (cr, extents.x_bearing, extents.height);
 	cairo_rel_line_to (cr, -extents.width, 0);
 	cairo_stroke (cr);
-/*
 
 
-	const int len=150;
+
+	const int len=100;
 	DRAW_TEXT d[]={DRAW_TEXT_BEGIN,DRAW_TEXT_CENTER,DRAW_TEXT_END};
 	for(i=0;i<3;i++){
-		x = 30 + 350 * i;
-		y = 100;
+		x = 850;
+		y = 80 + 250 * i;
 
 		cairo_set_source_rgba(cr, 1, 0.2, 0.2, 0.6);
 		cairo_set_line_width(cr, 6.0);
@@ -100,7 +100,7 @@ void draw(GtkWidget *widget, cairo_t *cr){
 		gdk_cairo_set_source_rgba(cr, &BLACK_COLOR);
 		drawText(cr, string, x, y, d[i],DRAW_TEXT_CENTER);
 	}
-*/
+
 
 }
 
