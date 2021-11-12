@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		nw=int(w*.8);
 		e = getFileInfo(s,FILEINFO::NAME);
 //		if(w<600){
-		if(!startsWith(e, "102")){
+		if(!startsWith(e, "bar")){
 			continue;
 		}
 		if(nw>800){
